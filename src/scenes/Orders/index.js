@@ -13,6 +13,9 @@ class Orders extends React.Component {
     super(props);
     socket = io();
     socket.on('create', obj => this.props.addRequest(obj));
+
+    socket.on('canceled', () => this.props.getOrdersRequest());
+
     this.deliver = this.deliver.bind(this);
   }
   componentDidMount() {
