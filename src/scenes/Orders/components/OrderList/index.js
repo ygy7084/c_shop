@@ -10,14 +10,18 @@ const OrderList = function ({ orders, deliver }) {
               <li
                 key={item.datetime}
                 style={
-                  item.delivered ? { background: 'grey' } : undefined
+                  (item.status !== 0) ? { background: 'grey' } : undefined
                 }
               >
                 <p>{item.label}</p>
-                <p>{item.orderList.reduce((a, b) => (a + ', ' + b))}</p>
+                <ul>
+                <p>{item.products.map(product => (
+                  <li>{product.name}</li>
+                ))}</p>
+                </ul>
                 <p>{new Date(item.datetime).toLocaleString()}</p>
                 {
-                  !item.delivered ?
+                  (item.status ===0) ?
                     <button onClick={() => deliver(item._id)}>전달</button>
                   : null
                 }

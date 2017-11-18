@@ -47,7 +47,7 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
-        <h1>{this.props.getOrders.orders.filter(o => !o.delivered).length}개 주문 대기</h1>
+        <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         <OrderList
           orders={this.props.getOrders.orders.sort((a, b) => (
             new Date(b.datetime).getTime() - new Date(a.datetime).getTime()

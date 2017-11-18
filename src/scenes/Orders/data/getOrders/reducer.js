@@ -35,7 +35,7 @@ export const reducer = (state = initialState, action) => {
     case REMOVE:
       const newArr = JSON.parse(JSON.stringify(state.orders));
       const found = newArr.find(o => o._id === action._id);
-      found.delivered = true;
+      found.status = 1;
       return update(state, {
         orders: { $set: newArr },
       });
