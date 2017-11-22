@@ -75,3 +75,12 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Orders);
+
+  const tests = [{
+  }];
+
+function abbrevation(products){
+
+};
+
+abbrevation(tests);
