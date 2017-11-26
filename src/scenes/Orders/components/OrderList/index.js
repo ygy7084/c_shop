@@ -13,10 +13,17 @@ const OrderList = function ({ orders, deliver }) {
                   (item.status !== 0) ? { background: 'grey' } : undefined
                 }
               >
+                <p>주문 고객 : {item.customer.name}</p>
                 <p>{item.label}</p>
                 <ul>
                 <p>{item.products.map(product => (
-                  <li>{product.name}</li>
+                  <li>{product.name}
+                      {product.options.map(option => (
+                        <ul>
+                          option : {option}
+                        </ul>
+                      ))}
+                  </li>
                 ))}</p>
                 </ul>
                 <p>{new Date(item.datetime).toLocaleString()}</p>

@@ -1,4 +1,6 @@
 /* global fetch, document */
+import configure from '../../../../modules/configure';
+
 export const WAITING = 'data/getOrders/WAITING';
 export const SUCCESS = 'data/getOrders/SUCCESS';
 export const FAILURE = 'data/getOrders/FAILURE';
@@ -22,15 +24,19 @@ const failure = (error) => {
     error,
   };
 };
-export const request = () => {
+export const request = (shop_id) => {
   return (dispatch) => {
+    console.log(shop_id);
     dispatch(waiting());
-    return fetch('/api/order', {
-      method: 'GET',
+    return fetch('/api/order/post', {
+      method: 'POST',
+      credentials: 'include',
       headers: {
-        'pragma': 'no-cache',
-        'cache-control': 'no-cache',
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        data: { shop_id },
+      }),
     })
       .then((res) => {
         if (res.ok) { return res.json(); }
@@ -40,6 +46,8 @@ export const request = () => {
       })
       .then((res) => {
         if (res.data) {
+          console.log('check');
+          console.log(res.data);
           return dispatch(success(res.data));
         }
         return dispatch(failure({

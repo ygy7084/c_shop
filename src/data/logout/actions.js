@@ -1,10 +1,10 @@
 /* global fetch */
-import configure from '../../../../modules/configure';
-import * as loader from '../../../../data/loader/actions';
+import configure from '../../modules/configure';
+import * as loader from '../loader/actions';
 
-export const WAITING = 'Entry/data/login/WAITING';
-export const SUCCESS = 'Entry/data/login/SUCCESS';
-export const FAILURE = 'Entry/data/login/FAILURE';
+export const WAITING = 'data/logout/WAITING';
+export const SUCCESS = 'data/logout/SUCCESS';
+export const FAILURE = 'data/logout/FAILURE';
 
 const waiting = () => {
   return {
@@ -22,19 +22,16 @@ const failure = (error) => {
     error,
   };
 };
-export const request = (input) => {
+export const request = () => {
   return (dispatch) => {
     dispatch(loader.on());
     dispatch(waiting());
-    console.log(input);
-    return fetch(`${configure.SERVER}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    return fetch(`${configure.SERVER}/auth/logout`, {
+      method: 'GET',
       credentials: 'include',
-      body: JSON.stringify({
-        username: input.username,
-        password: input.password,
-      }),
+      headers: {
+        'cache-control': 'no-cache',
+      },
     })
       .then((res) => {
         dispatch(loader.off());
@@ -45,6 +42,7 @@ export const request = (input) => {
       })
       .then((res) => {
         if (res.data) {
+          console.log(res.data);
           return dispatch(success(res.data));
         }
         return dispatch(failure({

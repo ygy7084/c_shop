@@ -27,7 +27,7 @@ export const request = () => {
   return (dispatch) => {
     dispatch(loader.on());
     dispatch(waiting());
-    return fetch('/auth', {
+    return fetch(`${configure.SERVER}/auth`, {
       method: 'GET',
       credentials: 'include',
       headers: {
