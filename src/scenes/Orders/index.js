@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import * as getOrdersActions from './data/getOrders/actions';
 import * as deliverActions from './data/deliver/actions';
 import * as noticeDialogActions from '../../data/noticeDialog/actions';
+import * as logoutActions from '../../data/logout/actions';
+import * as authActions from '../../data/auth/actions';
 import OrderList from './components/OrderList';
 
 let socket;
@@ -13,13 +15,14 @@ class Orders extends React.Component {
     super(props);
     socket = io();
     socket.on('create', obj => this.props.addRequest(obj));
-
     socket.on('canceled', () => this.props.getOrdersRequest());
 
+    this.logoutHandler = this.logoutHandler.bind(this);
     this.deliver = this.deliver.bind(this);
   }
   componentDidMount() {
-    this.props.getOrdersRequest()
+    const shop_id = this.props.user.account.shop_id;
+    this.props.getOrdersRequest(shop_id)
       .then((data) => {
         if (this.props.getOrders.status === 'SUCCESS') {
         } else {
@@ -28,6 +31,17 @@ class Orders extends React.Component {
       })
       .catch((data) => {
         console.error(data);
+      });
+  }
+  logoutHandler() {
+    this.props.logoutRequest()
+      .then((data) => {
+        if (this.props.logout.status === 'SUCCESS') {
+          this.props.authRequest();
+          console.log(this.props.state);
+        } else {
+          throw data;
+        }
       });
   }
   deliver(_id) {
@@ -47,6 +61,8 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
+        <button
+          onClick={this.logoutHandler}>로그아웃</button>
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         <OrderList
           orders={this.props.getOrders.orders.sort((a, b) => (
@@ -61,6 +77,8 @@ class Orders extends React.Component {
 const mapStateToProps = state => ({
   getOrders: state.orders.data.getOrders,
   deliver: state.orders.data.deliver,
+  logout: state.data.logout,
+  state
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
   noticeDialogOn: noticeDialogActions.on,
@@ -70,6 +88,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   addRequest: getOrdersActions.add,
   removeRequest: getOrdersActions.remove,
   deliverRequest: deliverActions.request,
+  logoutRequest: logoutActions.request,
+  authRequest: authActions.request,
 }, dispatch);
 export default connect(
   mapStateToProps,
@@ -80,7 +100,6 @@ export default connect(
   }];
 
 function abbrevation(products){
-
 };
 
 abbrevation(tests);

@@ -16,7 +16,6 @@ import Loader from './components/Loader';
 import Orders from './scenes/Orders';
 import Entry from './scenes/Entry';
 
-
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -30,8 +29,6 @@ class App extends React.Component {
   componentWillMount(){
     this.props.authRequest();
   }
-
-
   constructor(props) {
     super(props);
   }
@@ -46,7 +43,8 @@ class App extends React.Component {
                 path="/"
                 render={
                   props => <Orders user={this.props.auth.user} {...props} />}
-              /> : this.props.auth.status === 'INIT' || this.props.auth.status === 'WAITING' ?
+                 />
+               : this.props.auth.status === 'INIT' || this.props.auth.status === 'WAITING' ?
                   null :
                   <Route
                     path="/"
