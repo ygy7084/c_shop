@@ -21,8 +21,8 @@ class Orders extends React.Component {
     this.deliver = this.deliver.bind(this);
   }
   componentDidMount() {
-    const shop_id = this.props.user.account.shop_id;
-    this.props.getOrdersRequest(shop_id)
+    const shopId = this.props.user.shop._id;
+    this.props.getOrdersRequest(shopId)
       .then((data) => {
         if (this.props.getOrders.status === 'SUCCESS') {
         } else {
@@ -61,8 +61,9 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
-        <button
-          onClick={this.logoutHandler}>로그아웃</button>
+        <button onClick={this.logoutHandler}>
+          로그아웃
+        </button>
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         <OrderList
           orders={this.props.getOrders.orders.sort((a, b) => (

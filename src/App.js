@@ -26,11 +26,9 @@ const theme = createMuiTheme({
 });
 
 class App extends React.Component {
-  componentWillMount(){
-    this.props.authRequest();
-  }
   constructor(props) {
     super(props);
+    this.props.authRequest();
   }
   render() {
     const { noticeDialog } = this.props;
@@ -38,13 +36,12 @@ class App extends React.Component {
       <MuiThemeProvider theme={theme}>
         <div style={{ height: '100%' }}>
           {
-            this.props.auth.user && this.props.auth.user.kind === 'account' ?
+            this.props.auth.user ?
               <Route
                 path="/"
                 render={
                   props => <Orders user={this.props.auth.user} {...props} />}
-                 />
-               : this.props.auth.status === 'INIT' || this.props.auth.status === 'WAITING' ?
+              /> : this.props.auth.status === 'INIT' || this.props.auth.status === 'WAITING' ?
                   null :
                   <Route
                     path="/"
@@ -71,7 +68,7 @@ class App extends React.Component {
 }
 const mapStateToProps = state => ({
   noticeDialog: state.data.noticeDialog,
-  auth : state.data.auth,
+  auth: state.data.auth,
   loading: state.data.loader,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({

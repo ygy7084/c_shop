@@ -26,14 +26,15 @@ export const request = (input) => {
   return (dispatch) => {
     dispatch(loader.on());
     dispatch(waiting());
-    console.log(input);
     return fetch(`${configure.SERVER}/auth/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: input.username,
-        password: input.password,
+        data: {
+          username: input.username,
+          password: input.password,
+        },
       }),
     })
       .then((res) => {

@@ -17,13 +17,14 @@ class Entry extends React.Component {
       password: account.inputPassword,
     })
       .then((data) => {
-        if (this.props.login.status === 'SUCCESS') {
-          this.props.authRequest();
-        } else {
+        if (this.props.login.status === 'FAILURE') {
           throw data;
+        } else {
+          this.props.authRequest();
         }
       })
       .catch((data) => {
+        console.log(data);
         turnOnSimpleMessage.error('로그인 실패');
       });
   }

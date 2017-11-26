@@ -1,6 +1,7 @@
 /* global fetch */
 import configure from '../../modules/configure';
 import * as loader from '../loader/actions';
+import getCookie from '../../modules/getCookie';
 
 export const WAITING = 'data/auth/WAITING';
 export const SUCCESS = 'data/auth/SUCCESS';
@@ -29,9 +30,10 @@ export const request = () => {
     dispatch(waiting());
     return fetch(`${configure.SERVER}/auth`, {
       method: 'GET',
-      credentials: 'include',
       headers: {
+        pragma: 'no-cache',
         'cache-control': 'no-cache',
+        Authorization: `Bearer ${getCookie('account')}`
       },
     })
       .then((res) => {
