@@ -27,7 +27,7 @@ export const request = () => {
   return (dispatch) => {
     dispatch(loader.on());
     dispatch(waiting());
-    return fetch(`http://localhost:4001/auth`, {
+    return fetch('/auth', {
       method: 'GET',
       credentials: 'include',
       headers: {

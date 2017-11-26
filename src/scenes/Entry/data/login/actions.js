@@ -26,7 +26,7 @@ export const request = (input) => {
   return (dispatch) => {
     dispatch(loader.on());
     dispatch(waiting());
-    return fetch(`http://localhost:4001/auth/login`, {
+    return fetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
