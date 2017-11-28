@@ -30,7 +30,7 @@ export const reducer = (state = initialState, action) => {
       });
     case ADD:
       return update(state, {
-        orders: { $set: action.orders },
+        orders: { $push: [action.order] },
       });
     case REMOVE: {
       const newArr = JSON.parse(JSON.stringify(state.orders));
