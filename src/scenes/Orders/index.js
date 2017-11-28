@@ -64,6 +64,13 @@ class Orders extends React.Component {
         <button onClick={this.logoutHandler}>
           로그아웃
         </button>
+        <button>
+          실시간 주문내역
+        </button>
+        <button>
+          과거 주문내역
+        </button>
+
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         <OrderList
           orders={this.props.getOrders.orders.sort((a, b) => (
