@@ -13,14 +13,18 @@ const OrderList = function ({ orders, deliver }) {
                   (item.status !== 0) ? { background: 'grey' } : undefined
                 }
               >
-                <p>주문 고객 : {item.customer.name}</p>
+                <p>주문 고객 : </p>
+                <p>주문 금액 : {item.wholePrice}</p>
                 <p>{item.label}</p>
                 <ul>
                 <p>{item.products.map(product => (
-                  <li>{product.name}
+                  <li>{product.name}, {product.number}개
                       {product.options.map(option => (
                         <ul>
-                          option : {option}
+                          {option.name} :
+                          {option.selections.map(selection => (
+                            selection.name
+                            ))}
                         </ul>
                       ))}
                   </li>
