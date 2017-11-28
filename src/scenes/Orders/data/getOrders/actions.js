@@ -24,18 +24,18 @@ const failure = (error) => {
     error,
   };
 };
-export const request = (shop_id) => {
+export const request = (shopId) => {
   return (dispatch) => {
-    console.log(shop_id);
+    console.log(shopId);
     dispatch(waiting());
-    return fetch('/api/order/post', {
+    return fetch(`${configure.SERVER}/api/order/post`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        data: { shop_id },
+        data: { shopId },
       }),
     })
       .then((res) => {
@@ -46,8 +46,6 @@ export const request = (shop_id) => {
       })
       .then((res) => {
         if (res.data) {
-          console.log('check');
-          console.log(res.data);
           return dispatch(success(res.data));
         }
         return dispatch(failure({

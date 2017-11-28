@@ -30,16 +30,18 @@ export const reducer = (state = initialState, action) => {
       });
     case ADD:
       return update(state, {
-        orders: { $push: [action.order] },
+        orders: { $set: action.orders },
       });
-    case REMOVE:
+    case REMOVE: {
       const newArr = JSON.parse(JSON.stringify(state.orders));
       const found = newArr.find(o => o._id === action._id);
       found.status = 1;
       return update(state, {
         orders: { $set: newArr },
       });
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };

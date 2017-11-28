@@ -1,4 +1,6 @@
 /* global fetch, document */
+import configure from '../../../../modules/configure';
+
 export const WAITING = 'data/deliver/WAITING';
 export const SUCCESS = 'data/deliver/SUCCESS';
 export const FAILURE = 'data/deliver/FAILURE';
@@ -22,7 +24,7 @@ const failure = (error) => {
 export const request = (_id) => {
   return (dispatch) => {
     dispatch(waiting());
-    return fetch('/api/order/deliver', {
+    return fetch(`${configure.SERVER}/api/order/deliver`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

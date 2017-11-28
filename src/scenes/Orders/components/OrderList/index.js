@@ -17,8 +17,8 @@ const OrderList = function ({ orders, deliver }) {
                 <p>주문 금액 : {item.wholePrice}</p>
                 <p>{item.label}</p>
                 <ul>
-                <p>{item.products.map(product => (
-                  <li>{product.name}, {product.number}개
+                  {item.products.map(product => (
+                    <li>{product.name}, {product.number}개
                       {product.options.map(option => (
                         <ul>
                           {option.name} :
@@ -27,12 +27,12 @@ const OrderList = function ({ orders, deliver }) {
                             ))}
                         </ul>
                       ))}
-                  </li>
-                ))}</p>
+                    </li>
+                  ))}
                 </ul>
                 <p>{new Date(item.datetime).toLocaleString()}</p>
                 {
-                  (item.status ===0) ?
+                  (item.status === 0) ?
                     <button onClick={() => deliver(item._id)}>전달</button>
                   : null
                 }
