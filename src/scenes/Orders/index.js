@@ -1,6 +1,7 @@
 import React from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
+import Sound from 'react-sound';
 import { bindActionCreators } from 'redux';
 import * as getOrdersActions from './data/getOrders/actions';
 import * as deliverActions from './data/deliver/actions';
@@ -13,8 +14,17 @@ let socket;
 class Orders extends React.Component {
   constructor(props) {
     super(props);
+    this.state= {
+      playStatus: Sound.status.STOPPED
+    };
+
+    //console.log(this.status);
     socket = io();
-    socket.on('create', obj => this.props.addRequest(obj));
+    socket.on('create', obj => {
+      this.setState({ playStatus: Sound.status.PLAYING});
+      console.log(this.state);
+      this.props.addRequest(obj);
+    });
     socket.on('canceled', () => this.props.getOrdersRequest());
 
     this.logoutHandler = this.logoutHandler.bind(this);
@@ -38,7 +48,6 @@ class Orders extends React.Component {
       .then((data) => {
         if (this.props.logout.status === 'SUCCESS') {
           this.props.authRequest();
-          console.log(this.props.state);
         } else {
           throw data;
         }
@@ -61,6 +70,10 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
+        <Sound
+          url="alarm_sound.mp3"
+          playStatus={this.state.playStatus}
+          />
         <button onClick={this.logoutHandler}>
           로그아웃
         </button>
