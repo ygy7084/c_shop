@@ -14,6 +14,7 @@ const OrderList = function ({ orders, deliver }) {
                 }
               >
                 <p>주문 고객 : </p>
+                <p>NFC : </p>
                 <p>주문 금액 : {item.wholePrice}</p>
                 <p>{item.label}</p>
                 <ul>

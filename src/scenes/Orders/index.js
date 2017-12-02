@@ -1,7 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import Sound from 'react-sound';
 import { bindActionCreators } from 'redux';
 import * as getOrdersActions from './data/getOrders/actions';
 import * as deliverActions from './data/deliver/actions';
@@ -11,24 +10,20 @@ import * as authActions from '../../data/auth/actions';
 import OrderList from './components/OrderList';
 
 let socket;
+
 class Orders extends React.Component {
   constructor(props) {
     super(props);
-    this.state= {
-      playStatus: Sound.status.STOPPED
-    };
-
-    //console.log(this.status);
     socket = io();
     socket.on('create', obj => {
-      this.setState({ playStatus: Sound.status.PLAYING});
-      console.log(this.state);
       this.props.addRequest(obj);
+      this.playAudio();
+
     });
     socket.on('canceled', () => this.props.getOrdersRequest());
-
     this.logoutHandler = this.logoutHandler.bind(this);
     this.deliver = this.deliver.bind(this);
+    this.playAudio = this.playAudio.bind(this);
   }
   componentDidMount() {
     const shopId = this.props.user.shop._id;
@@ -42,6 +37,10 @@ class Orders extends React.Component {
       .catch((data) => {
         console.error(data);
       });
+  }
+  playAudio() {
+    let audio = document.querySelector("audio");
+    audio.play();
   }
   logoutHandler() {
     this.props.logoutRequest()
@@ -70,10 +69,9 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
-        <Sound
-          url="alarm_sound.mp3"
-          playStatus={this.state.playStatus}
-          />
+        <audio src="alarm_sound.mp3" >
+          HTML5 Audio를 지원하지 않는 브라우저입니다
+        </audio>
         <button onClick={this.logoutHandler}>
           로그아웃
         </button>
@@ -82,6 +80,9 @@ class Orders extends React.Component {
         </button>
         <button>
           과거 주문내역
+        </button>
+        <button onClick={this.playAudio}>
+          소리재생
         </button>
 
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
