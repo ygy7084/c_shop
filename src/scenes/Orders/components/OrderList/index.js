@@ -13,8 +13,10 @@ const OrderList = function ({ orders, deliver }) {
                   (item.status !== 0) ? { background: 'grey' } : undefined
                 }
               >
-                <p>주문 고객 : </p>
-                <p>NFC : </p>
+                <ul>주문 고객 :  {(item.customer !== undefined) ? <li>name : {(item.customer.name===undefined)?'이름없음':item.customer.name} phone : {(item.customer.phone)}</li>
+                  : '고객정보없음'} </ul>
+                <p>NFC : {(item.nfc !== undefined) ? (item.nfc.name) : 'nfc정보 없음'}</p>
+                <p>Place : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
                 <p>주문 금액 : {item.wholePrice}</p>
                 <p>{item.label}</p>
                 <ul>
