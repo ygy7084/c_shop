@@ -18,7 +18,7 @@ class Orders extends React.Component {
     socket.on('create', obj => {
       this.props.addRequest(obj);
       this.playAudio();
-
+      window.navigator.vibrate([2000, 100, 200]);
     });
     socket.on('canceled', () => this.props.getOrdersRequest());
     this.logoutHandler = this.logoutHandler.bind(this);
