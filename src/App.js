@@ -15,7 +15,6 @@ import NoticeDialog from './components/NoticeDialog';
 import Loader from './components/Loader';
 import Orders from './scenes/Orders';
 import Entry from './scenes/Entry';
-import Test from './scenes/Test';
 
 const theme = createMuiTheme({
   palette: {

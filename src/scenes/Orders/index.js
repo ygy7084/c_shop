@@ -18,6 +18,8 @@ class Orders extends React.Component {
     super(props);
     this.state = {
       showComponent: false,
+      showRealTime: true,
+      now : new Date(),
     };
     this.toPoint = this.toPoint.bind(this);
 
@@ -30,10 +32,18 @@ class Orders extends React.Component {
     });
     socket.on('canceled', () => this.props.getOrdersRequest(shopId));
     socket.on('deliverComplete', () => this.props.getOrdersRequest(shopId));
+    socket.on('confirmDelivered', (_id) => {
+      console.log('push 확인 들어옴 order : ' + _id);
+    });
+
     this.logoutHandler = this.logoutHandler.bind(this);
     this.deliver = this.deliver.bind(this);
     this.playAudio = this.playAudio.bind(this);
     this.cancel = this.cancel.bind(this);
+    this.realtimeCheckHandler = this.realtimeCheckHandler.bind(this);
+    this.setTimeNow = this.setTimeNow.bind(this);
+
+    setInterval(this.setTimeNow, 1000);
   }
   componentDidMount() {
     const shopId = this.props.user.shop._id;
@@ -48,6 +58,12 @@ class Orders extends React.Component {
         console.error(data);
       });
   }
+  setTimeNow() {
+    //console.log(this.state.now.toLocaleString());
+    this.setState({
+      now: new Date(),
+    })
+  }
   playAudio() {
     let audio = document.querySelector("audio");
     audio.play();
@@ -60,6 +76,17 @@ class Orders extends React.Component {
     } else{
       this.setState({
         showComponent: false,
+      })
+    }
+  }
+  realtimeCheckHandler(){
+    if (this.state.showRealTime === false) {
+      this.setState({
+        showRealTime: true,
+      });
+    } else{
+      this.setState({
+        showRealTime: false,
       })
     }
   }
@@ -115,18 +142,36 @@ class Orders extends React.Component {
           소리재생
         </button>
         <button onClick={this.toPoint}>포인트적립</button>
+        <button onClick={this.realtimeCheckHandler}>{(this.state.showRealTime===true)?'과거주문내역':'실시간주문내역'}</button>
         {this.state.showComponent ?
           <Point /> :
           null
         }
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
-        <OrderList
-          orders={this.props.getOrders.orders.sort((a, b) => (
-            new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
-          ))}
-          deliver={this.deliver}
-          cancel={this.cancel}
-        />
+
+        {
+          (this.state.showRealTime === true) ?
+            <div>
+              <OrderList
+                orders={this.props.getOrders.orders.filter(o=> !o.status).sort((a, b) => (
+                  new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+                ))}
+                deliver={this.deliver}
+                cancel={this.cancel}
+                now={this.state.now}
+              />
+            </div> :
+            <div>
+              <OrderList
+                orders={this.props.getOrders.orders.filter(o=> o.status).sort((a, b) => (
+                  new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+                ))}
+                deliver={this.deliver}
+                cancel={this.cancel}
+                now={this.state.now}
+              />
+            </div>
+        }
       </div>
     );
   }

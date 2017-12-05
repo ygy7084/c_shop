@@ -1,10 +1,10 @@
 import React from 'react';
-
+import timeConvert from '../../modules/timeConvert';
 const styles = {
-  color : 'red'
+  color: 'red'
 };
 
-const OrderList = function ({ orders, deliver, cancel }) {
+const OrderList = function ({ orders, deliver, cancel, now }) {
   return (
     <div>
       <ul>
@@ -42,6 +42,7 @@ const OrderList = function ({ orders, deliver, cancel }) {
                   ))}
                 </ul>
                 <p>{new Date(item.datetime).toLocaleString()}</p>
+                <p>{timeConvert(Math.floor((now.getTime() - new Date(item.datetime).getTime()) / 1000))}</p>
                 {
                   (item.status === 0) ?
                     <div>
