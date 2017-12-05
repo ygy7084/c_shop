@@ -10,7 +10,8 @@
 /build
 
 /.idea
-
+src/scenes/Test/
+src/scenes/Point/
 test.js
 
 # misc

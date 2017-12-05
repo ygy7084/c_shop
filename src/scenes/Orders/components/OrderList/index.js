@@ -1,6 +1,10 @@
 import React from 'react';
 
-const OrderList = function ({ orders, deliver }) {
+const styles = {
+  color : 'red'
+};
+
+const OrderList = function ({ orders, deliver, cancel }) {
   return (
     <div>
       <ul>
@@ -13,8 +17,12 @@ const OrderList = function ({ orders, deliver }) {
                   (item.status !== 0) ? { background: 'grey' } : undefined
                 }
               >
-                <ul>주문 고객 :  {(item.customer !== undefined) ? <li>name : {(item.customer.name===undefined)?'이름없음':item.customer.name} phone : {(item.customer.phone)}</li>
-                  : '고객정보없음'} </ul>
+                <ul>
+                  주문 고객 :  {(item.customer !== undefined) ?
+                    <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name} phone : {(item.customer.phone)}</li>
+                    : '고객정보없음'}
+
+                </ul>
                 <p>NFC : {(item.nfc !== undefined) ? (item.nfc.name) : 'nfc정보 없음'}</p>
                 <p>Place : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
                 <p>주문 금액 : {item.wholePrice}</p>
@@ -36,7 +44,11 @@ const OrderList = function ({ orders, deliver }) {
                 <p>{new Date(item.datetime).toLocaleString()}</p>
                 {
                   (item.status === 0) ?
-                    <button onClick={() => deliver(item._id)}>전달</button>
+                    <div>
+                      <button onClick={() => deliver(item._id)}>전달</button>
+                      <button onClick={() => cancel(item._id)}>주문취소</button>
+                      <div style={styles}>{(!item.keys) ? 'push알림 불가' : ''}</div>
+                    </div>
                   : null
                 }
               </li>

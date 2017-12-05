@@ -7,23 +7,33 @@ import * as deliverActions from './data/deliver/actions';
 import * as noticeDialogActions from '../../data/noticeDialog/actions';
 import * as logoutActions from '../../data/logout/actions';
 import * as authActions from '../../data/auth/actions';
+import * as cancelActions from './data/cancel/actions';
 import OrderList from './components/OrderList';
+import Point from '../../scenes/Point';
 
 let socket;
 
 class Orders extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showComponent: false,
+    };
+    this.toPoint = this.toPoint.bind(this);
+
+    const shopId = this.props.user.shop._id;
     socket = io();
     socket.on('create', obj => {
       this.props.addRequest(obj);
       this.playAudio();
       window.navigator.vibrate([2000, 100, 200]);
     });
-    socket.on('canceled', () => this.props.getOrdersRequest());
+    socket.on('canceled', () => this.props.getOrdersRequest(shopId));
+    socket.on('deliverComplete', () => this.props.getOrdersRequest(shopId));
     this.logoutHandler = this.logoutHandler.bind(this);
     this.deliver = this.deliver.bind(this);
     this.playAudio = this.playAudio.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
   componentDidMount() {
     const shopId = this.props.user.shop._id;
@@ -41,6 +51,17 @@ class Orders extends React.Component {
   playAudio() {
     let audio = document.querySelector("audio");
     audio.play();
+  }
+  toPoint(){
+    if (this.state.showComponent === false) {
+      this.setState({
+        showComponent: true,
+      });
+    } else{
+      this.setState({
+        showComponent: false,
+      })
+    }
   }
   logoutHandler() {
     this.props.logoutRequest()
@@ -66,6 +87,21 @@ class Orders extends React.Component {
         console.error(data);
       });
   }
+  cancel(_id) {
+    this.props.cancelRequest(_id)
+      .then((data) => {
+        if (this.props.cancel.status === 'SUCCESS') {
+          socket.emit('cancel', _id);
+          this.props.removeRequest(_id);
+        } else {
+          throw data;
+        }
+      })
+      .catch((data) => {
+      console.error(data);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -75,22 +111,21 @@ class Orders extends React.Component {
         <button onClick={this.logoutHandler}>
           로그아웃
         </button>
-        <button>
-          실시간 주문내역
-        </button>
-        <button>
-          과거 주문내역
-        </button>
         <button onClick={this.playAudio}>
           소리재생
         </button>
-
+        <button onClick={this.toPoint}>포인트적립</button>
+        {this.state.showComponent ?
+          <Point /> :
+          null
+        }
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         <OrderList
           orders={this.props.getOrders.orders.sort((a, b) => (
             new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
           ))}
           deliver={this.deliver}
+          cancel={this.cancel}
         />
       </div>
     );
@@ -99,6 +134,7 @@ class Orders extends React.Component {
 const mapStateToProps = state => ({
   getOrders: state.orders.data.getOrders,
   deliver: state.orders.data.deliver,
+  cancel: state.orders.data.cancel,
   logout: state.data.logout,
   state
 });
@@ -107,6 +143,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   noticeDialogOff: noticeDialogActions.off,
   showError: noticeDialogActions.error,
   getOrdersRequest: getOrdersActions.request,
+  cancelRequest: cancelActions.request,
   addRequest: getOrdersActions.add,
   removeRequest: getOrdersActions.remove,
   deliverRequest: deliverActions.request,
