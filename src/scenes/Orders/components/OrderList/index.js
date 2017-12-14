@@ -21,10 +21,12 @@ const OrderList = function ({ orders, deliver, cancel, now }) {
                 >
                     <ul>
                       주문 고객 :  {(item.customer !== undefined) ?
-                      <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name}<br/> phone : {(item.customer.phone)}</li>
+                      <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name}<br/> phone : <a href={`tel:+${item.customer.phone}`}>{(item.customer.phone)}</a></li>
                       : '고객정보없음'}
                     </ul>
-                    <p>장소 : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
+                    <p style ={
+                      (item.place !== undefined) ? {color:'red'}  : undefined
+                    }>장소 : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
                     <p>주문 금액 : {item.wholePrice}</p>
                     <p>{item.label}</p>
                     <ul>
