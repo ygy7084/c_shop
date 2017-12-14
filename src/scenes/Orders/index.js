@@ -10,6 +10,7 @@ import * as authActions from '../../data/auth/actions';
 import * as cancelActions from './data/cancel/actions';
 import OrderList from './components/OrderList';
 import Point from '../../scenes/Point';
+import Paper from './components/OrderPaper';
 
 let socket;
 
@@ -148,7 +149,6 @@ class Orders extends React.Component {
           null
         }
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
-
         {
           (this.state.showRealTime === true) ?
             <div>
@@ -168,7 +168,6 @@ class Orders extends React.Component {
                 ))}
                 deliver={this.deliver}
                 cancel={this.cancel}
-                now={this.state.now}
               />
             </div>
         }

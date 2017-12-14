@@ -1,5 +1,8 @@
 export default function timeConvert(second) {
-  const hour = Math.floor(second / 3600);
+  if(second<=0){
+    second = 1;
+  }
+  let hour = Math.floor((second) / 3600);
   const min = Math.floor((second - (hour * 3600)) / 60);
   const sec = second - (hour * 3600) - (min * 60);
   let result = hour + '시간 ' + min + '분 ' + sec + '초전';

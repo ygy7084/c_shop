@@ -24,5 +24,7 @@ module.exports = {
     "react/no-array-index-key":0,
     "react/prefer-stateless-function":0,
     "key-spacing":0,
+    "max-len":0,
+    "object-curly-newline":0,
   },
 };

@@ -1,28 +1,44 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
 import timeConvert from '../../modules/timeConvert';
-import './styles1.css';
 
+const styles = theme => ({
+  root: theme.mixins.gutters({
+    paddingTop: 16,
+    paddingBottom: 16,
+    marginTop: theme.spacing.unit * 3,
+    width: 300,
+    height: 500,
+  }),
+});
 const pushStyles = {
   color: 'red'
 };
-const OrderList = function ({ orders, deliver, cancel, now }) {
+
+function PaperSheet({ orders, deliver, cancel, now }) {
   return (
     <div>
-        {
-          orders.length ?
-            orders.map(item => (
-                <Paper
-                  className="paper"
-                  zdepth={4}
-                  style={
-                    (item.status !== 0) ? {background: 'grey', marginTop: '10px'}  : {marginTop: '10px'}
-                  }
-                >
+      <Paper elevation={4}>
+        hi
+
+          <ul>
+            {
+              orders.length ?
+                orders.map(item => (
+                  <li
+                    key={item.datetime}
+                    style={
+                      (item.status !== 0) ? { background: 'grey' } : undefined
+                    }
+                  >
                     <ul>
                       주문 고객 :  {(item.customer !== undefined) ?
-                      <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name}<br/> phone : {(item.customer.phone)}</li>
+                      <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name} phone : {(item.customer.phone)}</li>
                       : '고객정보없음'}
+
                     </ul>
                     <p>NFC : {(item.nfc !== undefined) ? (item.nfc.name) : 'nfc정보 없음'}</p>
                     <p>Place : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
@@ -45,7 +61,7 @@ const OrderList = function ({ orders, deliver, cancel, now }) {
                     <p>{new Date(item.datetime).toLocaleString()}</p>
                     {(now) ?
                       <div>
-                        <p>{timeConvert(Math.floor((now.getTime() - new Date(item.datetime).getTime()) / 1000) + 1)}</p>
+                        <p>{timeConvert(Math.floor((this.props.now.getTime() - new Date(item.datetime).getTime()) / 1000) + 1)}</p>
                         {
                           (item.status === 0) ?
                             <div>
@@ -57,10 +73,18 @@ const OrderList = function ({ orders, deliver, cancel, now }) {
                         }
                       </div> : ''
                     }
-                </Paper>
-            )) : null
-        }
+                  </li>
+                )) : null
+            }
+          </ul>
+
+      </Paper>
     </div>
   );
+}
+
+PaperSheet.propTypes = {
+  classes: PropTypes.object.isRequired,
 };
-export default OrderList;
+
+export default withStyles(styles)(PaperSheet);
