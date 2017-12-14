@@ -10,7 +10,6 @@ import * as authActions from '../../data/auth/actions';
 import * as cancelActions from './data/cancel/actions';
 import OrderList from './components/OrderList';
 import Point from '../../scenes/Point';
-import Paper from './components/OrderPaper';
 
 let socket;
 
@@ -60,7 +59,6 @@ class Orders extends React.Component {
       });
   }
   setTimeNow() {
-    //console.log(this.state.now.toLocaleString());
     this.setState({
       now: new Date(),
     })
@@ -198,11 +196,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Orders);
-
-  const tests = [{
-  }];
-
-function abbrevation(products){
-};
-
-abbrevation(tests);

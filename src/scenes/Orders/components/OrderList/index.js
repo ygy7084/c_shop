@@ -24,8 +24,7 @@ const OrderList = function ({ orders, deliver, cancel, now }) {
                       <li>name : {(item.customer.name === undefined) ? '이름없음' : item.customer.name}<br/> phone : {(item.customer.phone)}</li>
                       : '고객정보없음'}
                     </ul>
-                    <p>NFC : {(item.nfc !== undefined) ? (item.nfc.name) : 'nfc정보 없음'}</p>
-                    <p>Place : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
+                    <p>장소 : {(item.place !== undefined) ? (item.place.name) : 'place 정보 없음'}</p>
                     <p>주문 금액 : {item.wholePrice}</p>
                     <p>{item.label}</p>
                     <ul>

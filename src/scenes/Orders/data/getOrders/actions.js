@@ -26,7 +26,6 @@ const failure = (error) => {
 };
 export const request = (shopId) => {
   return (dispatch) => {
-    console.log(shopId);
     dispatch(waiting());
     return fetch(`${configure.SERVER}/api/order/post`, {
       method: 'POST',
