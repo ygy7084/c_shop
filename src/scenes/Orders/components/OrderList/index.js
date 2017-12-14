@@ -3,9 +3,6 @@ import Paper from 'material-ui/Paper';
 import timeConvert from '../../modules/timeConvert';
 import './styles1.css';
 
-const pushStyles = {
-  color: 'red'
-};
 const OrderList = function ({ orders, deliver, cancel, now }) {
   return (
     <div>
@@ -52,7 +49,7 @@ const OrderList = function ({ orders, deliver, cancel, now }) {
                             <div>
                               <button onClick={() => deliver(item._id)}>전달</button>
                               <button onClick={() => cancel(item._id)}>주문취소</button>
-                              <div style={pushStyles}>{(!item.keys) ? 'push알림 불가' : ''}</div>
+                              <div style={{color:'red'}}>{(!item.keys) ? 'push알림 불가' : ''}</div>
                             </div>
                             : null
                         }
