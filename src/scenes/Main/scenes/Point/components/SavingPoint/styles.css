@@ -1,0 +1,50 @@
+.savingPoint {
+  height: 100%;
+  overflow: hidden; }
+
+.savingPointTopView {
+  background: #2196f3;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+
+.pointNotification {
+  text-align: center;
+  font-size: 5vh;
+  margin: 0;
+  padding-bottom: 10%; }
+
+.savingPointPhoneInput {
+  text-align: center;
+  font-size: 6vh;
+  margin: 0; }
+
+.console-underscore {
+  display: inline-block;
+  position: relative;
+  left: 5px;
+  animation-name: underscore;
+  animation-duration: 0.3s;
+  animation-direction: alternate;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite; }
+
+@keyframes underscore {
+  0% {
+    opacity: 1; }
+  25% {
+    opacity: 0.75; }
+  50% {
+    opacity: 0.5; }
+  75% {
+    opacity: 0.25; }
+  100% {
+    opacity: 0.01; } }
+
+.inputPhoneHelper {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
