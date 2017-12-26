@@ -23,7 +23,7 @@ class SavingPoint extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { status } = nextProps;
-    if (status) {
+    if (status && status !== this.props.status) {
       if (['submit', 'success', 'failure'].includes(status)) {
         this.setState({ topViewFullScreen: true });
       } else if (['standby', 'phoneInput'].includes(status)) {
@@ -32,6 +32,8 @@ class SavingPoint extends React.Component {
     }
   }
   handlePhoneInputSelect(v) {
+    // 타이머 초기화
+    this.props.updateElapsedTime();
     if (v === 'undo') {
       if (this.state.input.length > 0) {
         this.setState({

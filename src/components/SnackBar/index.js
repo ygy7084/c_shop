@@ -26,6 +26,7 @@ class SimpleSnackbar extends React.Component {
         SnackbarContentProps={{
           'aria-describedby': id,
         }}
+        key={id}
         message={<span id={id}>{content}</span>}
         action={[
           <IconButton

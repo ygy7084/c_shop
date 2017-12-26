@@ -14,15 +14,19 @@ import * as pointActions from './data/point/actions';
 import * as snackBarActions from '../../../../data/snackBar/actions';
 import OrderList from './components/OrderList';
 import SavingPoint from './components/SavingPoint';
+import TopButtons from './components/TopButtons';
+import DrawerMenu from './components/DrawerMenu';
 
 let socket;
+let timer;
 class Orders extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRealTime: true,
+      pastOrdersToggled: false,
       now : new Date(),
       SavingPointShow: false,
+      isDrawerMenuOpen: false,
     };
 
     const shopId = this.props.auth.user.shop._id;
@@ -57,7 +61,7 @@ class Orders extends React.Component {
     this.setTimeNow = this.setTimeNow.bind(this);
     this.handleSavingPoint = this.handleSavingPoint.bind(this);
 
-    setInterval(this.setTimeNow, 1000);
+    timer = setInterval(this.setTimeNow, 1000);
   }
   componentDidMount() {
     const shopId = this.props.auth.user.shop._id;
@@ -71,6 +75,15 @@ class Orders extends React.Component {
         console.error(data);
       });
   }
+  componentWillUnmount() {
+    if (socket) {
+      socket.close();
+      socket = null;
+    }
+    if (timer) {
+      clearInterval(timer);
+    }
+  }
   setTimeNow() {
     this.setState({
       now: new Date(),
@@ -81,15 +94,9 @@ class Orders extends React.Component {
     audio.play();
   }
   realtimeCheckHandler() {
-    if (this.state.showRealTime === false) {
-      this.setState({
-        showRealTime: true,
-      });
-    } else {
-      this.setState({
-        showRealTime: false,
-      });
-    }
+    this.setState({
+      pastOrdersToggled: !this.state.pastOrdersToggled,
+    });
   }
   logoutHandler() {
     this.props.logoutRequest()
@@ -149,20 +156,35 @@ class Orders extends React.Component {
         <audio src="alarm_sound.mp3" >
           HTML5 Audio를 지원하지 않는 브라우저입니다
         </audio>
-        <button onClick={this.logoutHandler}>
-          로그아웃
-        </button>
-        <button onClick={this.playAudio}>
-          소리재생
-        </button>
-        <button onClick={() => this.setState({ SavingPointShow: !this.state.SavingPointShow })}>
-          포인트 적립
-        </button>
-        <button onClick={() => this.props.changePage('/point')}>포인트적립</button>
-        <button onClick={this.realtimeCheckHandler}>{(this.state.showRealTime === true) ? '과거주문내역' : '실시간주문내역'}</button>
+        <DrawerMenu
+          open={this.state.isDrawerMenuOpen}
+          onClose={() => this.setState({
+            isDrawerMenuOpen: false,
+          })}
+          handleLogout={this.logoutHandler}
+          handleOpeningPointPage={() => this.props.changePage('/point')}
+          togglePastOrders={this.realtimeCheckHandler}
+          pastOrdersToggled={this.state.pastOrdersToggled}
+        />
+        <TopButtons
+          openDrawerMenu={() => this.setState({
+            isDrawerMenuOpen: true,
+          })}
+          handleAudio={this.playAudio}
+          handleSavingPoint={() => this.setState({ SavingPointShow: !this.state.SavingPointShow })}
+        />
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         {
-          (this.state.showRealTime === true) ?
+          this.state.pastOrdersToggled ?
+            <div>
+              <OrderList
+                orders={this.props.getOrders.orders.filter(o => o.status).sort((a, b) => (
+                  new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
+                ))}
+                deliver={this.deliver}
+                cancel={this.cancel}
+              />
+            </div> :
             <div>
               <OrderList
                 orders={this.props.getOrders.orders.filter(o => !o.status).sort((a, b) => (
@@ -171,15 +193,6 @@ class Orders extends React.Component {
                 deliver={this.deliver}
                 cancel={this.cancel}
                 now={this.state.now}
-              />
-            </div> :
-            <div>
-              <OrderList
-                orders={this.props.getOrders.orders.filter(o => o.status).sort((a, b) => (
-                  new Date(b.datetime).getTime() - new Date(a.datetime).getTime()
-                ))}
-                deliver={this.deliver}
-                cancel={this.cancel}
               />
             </div>
         }

@@ -10,6 +10,7 @@ const OrderList = function OrderList({ orders, deliver, cancel, now }) {
         orders.length ?
           orders.map(item => (
             <Paper
+              key={item._id}
               className="paper"
               zdepth={4}
               style={
@@ -29,9 +30,9 @@ const OrderList = function OrderList({ orders, deliver, cancel, now }) {
               <p>{item.label}</p>
               <ul>
                 {item.products.map(product => (
-                  <li>{product.name}, {product.number}개
+                  <li key={product._id}>{product.name}, {product.number}개
                     {product.options.map(option => (
-                      <ul>
+                      <ul key={option._id}>
                         {option.name} :
                         {option.selections.map(selection => (
                           selection.name

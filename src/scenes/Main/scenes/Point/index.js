@@ -8,10 +8,10 @@ import Transitions from './components/Transitions';
 import BasicPages from './components/BasicPages';
 import SavingPoint from './components/SavingPoint';
 import * as savePointActions from './data/savePoint/actions';
-import { turnOnSimpleMessage } from '../../../../components/SimpleMessage/index';
 import * as ballLoaderActions from '../../../../data/ballLoader/actions';
 
 let socket;
+let timer;
 class Point extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +19,7 @@ class Point extends React.Component {
       view: 'BasicPages',
       pointForSave: 0,
       SavingPointStatus: 'standby',
+      elapsedTime: null,
       /*
         standby: 대기
         phoneInput: 핸드폰 번호 입력
@@ -31,16 +32,22 @@ class Point extends React.Component {
     socket = io();
     socket.on('point', (data) => {
       const { view, pointForSave } = data;
-      if (view === 'BasicPages') {
-        this.setState({
-          view,
-          SavingPointStatus: 'standby',
-        });
-      } else if (view === 'SavingPoint') {
+      if (view === 'SavingPoint') {
+        // 타이머 초기화
+        if (!timer) {
+          timer = setInterval(() => {
+            if (new Date().getTime() - this.state.elapsedTime > 10000) {
+              clearInterval(timer);
+              timer = null;
+              this.setState({ view: 'BasicPages', SavingPointStatus: 'standby' });
+            }
+          }, 1000);
+        }
         this.setState({
           view,
           pointForSave,
           SavingPointStatus: 'phoneInput',
+          elapsedTime: new Date().getTime(),
         });
       }
     });
@@ -50,10 +57,18 @@ class Point extends React.Component {
       socket.close();
       socket = undefined;
     }
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
   }
   handleSavingPoint(phone) {
+    // 타이머 초기화
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
     this.setState({ SavingPointStatus: 'submit' });
-    //
     this.props.loader(true);
     this.props.savePointRequest({
       shopId: this.props.user.shop._id,
@@ -94,6 +109,9 @@ class Point extends React.Component {
               customer: this.props.savePoint.customer,
               point: this.props.savePoint.point,
             }}
+            updateElapsedTime={() => this.setState({
+              elapsedTime: new Date().getTime(),
+            })}
           />
         </Transitions>
       </Background>
