@@ -29,11 +29,13 @@ class Point extends React.Component {
        */
     };
     this.handleSavingPoint = this.handleSavingPoint.bind(this);
+    this.playAudio = this.playAudio.bind(this);
     socket = io();
     socket.on('point', (data) => {
       const { view, pointForSave } = data;
       if (view === 'SavingPoint') {
         // 타이머 초기화
+        this.playAudio();
         if (!timer) {
           timer = setInterval(() => {
             if (new Date().getTime() - this.state.elapsedTime > 10000) {
@@ -61,6 +63,10 @@ class Point extends React.Component {
       clearInterval(timer);
       timer = null;
     }
+  }
+  playAudio() {
+    const audio = document.querySelector('audio');
+    audio.play();
   }
   handleSavingPoint(phone) {
     // 타이머 초기화
@@ -97,6 +103,9 @@ class Point extends React.Component {
   render() {
     return (
       <Background toggle={this.state.view === 'SavingPoint'}>
+        <audio src="alarm_sound.mp3" >
+          HTML5 Audio를 지원하지 않는 브라우저입니다
+        </audio>
         <Transitions view={this.state.view}>
           <BasicPages transitionKey="BasicPages" />
           <SavingPoint
