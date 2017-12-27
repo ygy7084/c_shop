@@ -1,19 +1,19 @@
 /* global fetch, document */
-import configure from '../../../../../../modules/configure';
-import * as loader from '../../../../../../data/loader/actions';
+import configure from '../../../../../../../../modules/configure';
 
-export const WAITING = 'Main/orders/data/point/WAITING';
-export const SUCCESS = 'Main/orders/data/point/SUCCESS';
-export const FAILURE = 'Main/orders/data/point/FAILURE';
+export const WAITING = 'Main/orders/pointManager/data/useCustomerPoint/WAITING';
+export const SUCCESS = 'Main/orders/pointManager/data/useCustomerPoint/SUCCESS';
+export const FAILURE = 'Main/orders/pointManager/data/useCustomerPoint/FAILURE';
 
 const waiting = () => {
   return {
     type: WAITING,
   };
 };
-const success = () => {
+const success = (data) => {
   return {
     type: SUCCESS,
+    data,
   };
 };
 const failure = (error) => {
@@ -22,20 +22,22 @@ const failure = (error) => {
     error,
   };
 };
-export const request = (point) => {
+export const request = ({ shopId, customerId, point, }) => {
   return (dispatch) => {
-    dispatch(loader.on());
     dispatch(waiting());
-    return fetch(`${configure.SERVER}/api/point/request`, {
+    return fetch(`${configure.SERVER}/api/point/usePoint`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data: { point },
+        data: {
+          shopId,
+          customerId,
+          point,
+        },
       }),
     })
       .then((res) => {
-        dispatch(loader.off());
-        if (res) { return res.json(); }
+        if (res.ok) { return res.json(); }
         return res.json().then((error) => {
           throw error;
         });

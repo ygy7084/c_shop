@@ -16,9 +16,9 @@ const styles = theme => ({
     fontSize: '5em',
   },
   button: {
-    width: '20vw',
-    height: '10vh',
-    fontSize: '1.5em',
+    width: '15vw',
+    height: '7vh',
+    fontSize: '1.3em',
   },
 });
 class SavingPoint extends React.Component {

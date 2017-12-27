@@ -1,3 +1,5 @@
+/* global document */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,6 +9,7 @@ import Background from './components/Background';
 import Transitions from './components/Transitions';
 import BasicPages from './components/BasicPages';
 import SavingPoint from './components/SavingPoint';
+import SimpleDialog from '../../components/SimpleDialog';
 import * as savePointActions from './data/savePoint/actions';
 import * as ballLoaderActions from '../../../../data/ballLoader/actions';
 
@@ -16,6 +19,7 @@ class Point extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      dialogForSound: true,
       view: 'BasicPages',
       pointForSave: 0,
       SavingPointStatus: 'standby',
@@ -65,7 +69,7 @@ class Point extends React.Component {
     }
   }
   playAudio() {
-    const audio = document.querySelector('audio');
+    const audio = document.querySelector('#pointAudio');
     audio.play();
   }
   handleSavingPoint(phone) {
@@ -103,7 +107,14 @@ class Point extends React.Component {
   render() {
     return (
       <Background toggle={this.state.view === 'SavingPoint'}>
-        <audio src="alarm_sound.mp3" >
+        <SimpleDialog
+          isOpen={this.state.dialogForSound}
+          onConfirm={() => {
+            this.playAudio();
+            this.setState({ dialogForSound: false });
+          }}
+        />
+        <audio id="pointAudio" src="alarm_sound.mp3" >
           HTML5 Audio를 지원하지 않는 브라우저입니다
         </audio>
         <Transitions view={this.state.view}>

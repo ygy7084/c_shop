@@ -16,6 +16,7 @@ import OrderList from './components/OrderList';
 import SavingPoint from './components/SavingPoint';
 import TopButtons from './components/TopButtons';
 import DrawerMenu from './components/DrawerMenu';
+import PointManager from './scenes/PointManager';
 
 let socket;
 let timer;
@@ -25,6 +26,7 @@ class Orders extends React.Component {
     this.state = {
       pastOrdersToggled: false,
       now : new Date(),
+      PointManagerShow: false,
       SavingPointShow: false,
       isDrawerMenuOpen: false,
     };
@@ -90,7 +92,7 @@ class Orders extends React.Component {
     });
   }
   playAudio() {
-    const audio = document.querySelector('audio');
+    const audio = document.querySelector('#orderAudio');
     audio.play();
   }
   realtimeCheckHandler() {
@@ -153,7 +155,7 @@ class Orders extends React.Component {
   render() {
     return (
       <div>
-        <audio src="alarm_sound.mp3" >
+        <audio id="orderAudio" src="alarm_sound.mp3" >
           HTML5 Audio를 지원하지 않는 브라우저입니다
         </audio>
         <DrawerMenu
@@ -170,7 +172,7 @@ class Orders extends React.Component {
           openDrawerMenu={() => this.setState({
             isDrawerMenuOpen: true,
           })}
-          handleAudio={this.playAudio}
+          handleManagingPoint={() => this.setState({ PointManagerShow: !this.state.PointManagerShow })}
           handleSavingPoint={() => this.setState({ SavingPointShow: !this.state.SavingPointShow })}
         />
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
@@ -201,6 +203,12 @@ class Orders extends React.Component {
             <SavingPoint
               submit={point => this.handleSavingPoint(point)}
               cancel={() => this.setState({ SavingPointShow: false })}
+            /> : null
+        }
+        {
+          this.state.PointManagerShow ?
+            <PointManager
+              onClose={() => this.setState({ PointManagerShow: false })}
             /> : null
         }
       </div>

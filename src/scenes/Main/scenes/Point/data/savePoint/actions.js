@@ -1,9 +1,9 @@
 /* global fetch */
 import configure from '../../../../../../modules/configure';
 
-export const WAITING = 'Point/data/savePoint/WAITING';
-export const SUCCESS = 'Point/data/savePoint/SUCCESS';
-export const FAILURE = 'Point/data/savePoint/FAILURE';
+export const WAITING = 'Main/point/data/savePoint/WAITING';
+export const SUCCESS = 'Main/point/data/savePoint/SUCCESS';
+export const FAILURE = 'Main/point/data/savePoint/FAILURE';
 
 const waiting = () => {
   return {

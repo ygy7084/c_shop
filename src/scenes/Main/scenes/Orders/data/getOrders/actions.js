@@ -1,11 +1,11 @@
 /* global fetch, document */
 import configure from '../../../../../../modules/configure';
 
-export const WAITING = 'data/getOrders/WAITING';
-export const SUCCESS = 'data/getOrders/SUCCESS';
-export const FAILURE = 'data/getOrders/FAILURE';
-export const ADD = 'data/deliver/ADD';
-export const REMOVE = 'data/deliver/REMOVE';
+export const WAITING = 'Main/orders/data/getOrders/WAITING';
+export const SUCCESS = 'Main/orders/data/getOrders/SUCCESS';
+export const FAILURE = 'Main/orders/data/getOrders/FAILURE';
+export const ADD = 'Main/orders/data/deliver/ADD';
+export const REMOVE = 'Main/orders/data/deliver/REMOVE';
 
 const waiting = () => {
   return {

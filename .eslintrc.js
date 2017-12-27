@@ -27,5 +27,6 @@ module.exports = {
     "key-spacing":0,
     "max-len":0,
     "object-curly-newline":0,
+    "react/no-did-mount-set-state":0,
   },
 };

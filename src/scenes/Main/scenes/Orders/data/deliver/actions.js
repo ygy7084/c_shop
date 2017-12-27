@@ -1,16 +1,16 @@
 /* global fetch, document */
 import configure from '../../../../../../modules/configure';
 
-export const WAITING = 'data/deliver/WAITING';
-export const SUCCESS = 'data/deliver/SUCCESS';
-export const FAILURE = 'data/deliver/FAILURE';
+export const WAITING = 'Main/orders/data/deliver/WAITING';
+export const SUCCESS = 'Main/orders/data/deliver/SUCCESS';
+export const FAILURE = 'Main/orders/data/deliver/FAILURE';
 
 const waiting = () => {
   return {
     type: WAITING,
   };
 };
-const success = (orders) => {
+const success = () => {
   return {
     type: SUCCESS,
   };
