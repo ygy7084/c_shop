@@ -64,7 +64,6 @@ class SavingPoint extends React.Component {
       <Dialog
         open
         onClose={this.props.cancel}
-        onBackdropClick={this.props.cancel}
         aria-labelledby="SavingPointTitle"
       >
         <DialogTitle id="SavingPointTitle">포인트 적립</DialogTitle>

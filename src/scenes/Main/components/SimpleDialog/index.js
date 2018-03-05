@@ -19,7 +19,6 @@ class SimpleDialog extends React.Component {
       <Dialog
         open={isOpen}
         onClose={onConfirm}
-        onBackdropClick={onConfirm}
         aria-labelledby="SavingPointTitle"
       >
         <DialogTitle id="SavingPointTitle">포인트 적립을 시작합니다.</DialogTitle>
