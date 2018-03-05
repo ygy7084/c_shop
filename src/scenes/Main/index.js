@@ -15,17 +15,12 @@ class Main extends React.Component {
     return (
       <Switch>
         <Route
-          exact
-          path="/"
-          render={
-            props => <Orders {...props} />
-          }
+          path="/point"
+          component={Point}
         />
         <Route
-          path="/point"
-          render={
-            props => <Point {...props} />
-          }
+          path="/"
+          component={Orders}
         />
       </Switch>
     );

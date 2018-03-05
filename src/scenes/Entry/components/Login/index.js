@@ -41,7 +41,7 @@ class Login extends React.Component {
           <br />
           <Button
             className="button"
-            raised
+            variant="raised"
             color="primary"
             onClick={() => this.props.onLogin({
               inputId: this.state.inputId,

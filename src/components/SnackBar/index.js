@@ -22,7 +22,7 @@ class SimpleSnackbar extends React.Component {
         }}
         open={open}
         autoHideDuration={3000}
-        onRequestClose={handleClose}
+        onClose={handleClose}
         SnackbarContentProps={{
           'aria-describedby': id,
         }}

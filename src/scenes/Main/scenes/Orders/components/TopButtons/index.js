@@ -5,7 +5,8 @@ import { withStyles } from 'material-ui/styles';
 const styles = {
   button: {
     fontSize: '1.3em',
-    width: '33.333333%',
+    width: '25%',
+    height: '100%',
     borderRadius: '0px',
   },
 };
@@ -13,19 +14,23 @@ class TopButtons extends React.Component {
   render() {
     const {
       openDrawerMenu,
+      getPointList,
       handleSavingPoint,
       handleManagingPoint,
       classes,
     } = this.props;
     return (
       <div>
-        <Button classes={{ root: classes.button }} onClick={openDrawerMenu} color="primary" raised>
+        <Button classes={{ root: classes.button }} onClick={openDrawerMenu} color="primary">
           메뉴
         </Button>
-        <Button classes={{ root: classes.button }} onClick={handleManagingPoint} color="primary" raised>
-          포인트 관리
+        <Button classes={{ root: classes.button }} onClick={getPointList} color="primary">
+          포인트 적립 내역
         </Button>
-        <Button classes={{ root: classes.button }} onClick={handleSavingPoint} color="primary" raised>
+        <Button classes={{ root: classes.button }} onClick={handleManagingPoint} color="primary">
+          포인트 사용
+        </Button>
+        <Button classes={{ root: classes.button }} onClick={handleSavingPoint} color="primary">
           포인트 적립
         </Button>
       </div>

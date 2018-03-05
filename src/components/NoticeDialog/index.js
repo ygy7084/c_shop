@@ -12,7 +12,7 @@ const NoticeDialog = function NoticeDialog(
     open, onClose, title, text, onConfirm
   }) {
   return (
-    <Dialog open={open} onRequestClose={onClose}>
+    <Dialog open={open} onClose={onClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>

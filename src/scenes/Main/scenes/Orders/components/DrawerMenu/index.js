@@ -28,7 +28,7 @@ class DrawerMenu extends React.Component {
       pastOrdersToggled,
     } = this.props;
     return (
-      <Drawer open={open} onRequestClose={onClose}>
+      <Drawer open={open} onClose={onClose}>
         <div
           tabIndex={0}
           role="button"

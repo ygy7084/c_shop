@@ -30,7 +30,7 @@
     "keycode": "^2.1.9",
     "loaders.css": "^0.1.2",
     "lodash": "^4.17.4",
-    "material-ui": "^1.0.0-beta.19",
+    "material-ui": "^1.0.0-beta.35",
     "material-ui-icons": "^1.0.0-beta.17",
     "material-ui-upload": "^1.2.1",
     "node-sass-chokidar": "^0.0.3",
@@ -41,7 +41,7 @@
     "promise": "^8.0.1",
     "promise-polyfill": "^6.0.2",
     "prop-types": "^15.6.0",
-    "react": "^16.0.0",
+    "react": "^16.2.0",
     "react-addons-update": "^15.6.2",
     "react-autosuggest": "^9.3.2",
     "react-dev-utils": "^4.1.0",
@@ -73,11 +73,11 @@
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar src/ -o src/ && postcss src/**/*.css --use autoprefixer -d src/ -r",
+    "build-css": "node-sass-chokidar src/ -o src/ && postcss src/**/*.css --use autoprefixer -d src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",
-    "build": "npm run build-css && node scripts/build.js",
+    "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {

@@ -4,6 +4,10 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
+import {
+  Route,
+  withRouter,
+} from 'react-router-dom';
 import * as getOrdersActions from './data/getOrders/actions';
 import * as deliverActions from './data/deliver/actions';
 import * as noticeDialogActions from '../../../../data/noticeDialog/actions';
@@ -17,6 +21,7 @@ import SavingPoint from './components/SavingPoint';
 import TopButtons from './components/TopButtons';
 import DrawerMenu from './components/DrawerMenu';
 import PointManager from './scenes/PointManager';
+import PointList from './scenes/PointList';
 
 let socket;
 let timer;
@@ -26,8 +31,6 @@ class Orders extends React.Component {
     this.state = {
       pastOrdersToggled: false,
       now : new Date(),
-      PointManagerShow: false,
-      SavingPointShow: false,
       isDrawerMenuOpen: false,
     };
 
@@ -143,7 +146,6 @@ class Orders extends React.Component {
       .then((data) => {
         if (this.props.point.status === 'SUCCESS') {
           this.props.showSnackBar('SavingPointRequested', '포인트 적립을 시작합니다.');
-          this.setState({ SavingPointShow: false });
         } else {
           throw data;
         }
@@ -153,6 +155,7 @@ class Orders extends React.Component {
       });
   }
   render() {
+    const { match, history, push } = this.props;
     return (
       <div>
         <audio id="orderAudio" src="alarm_sound.mp3" >
@@ -164,7 +167,7 @@ class Orders extends React.Component {
             isDrawerMenuOpen: false,
           })}
           handleLogout={this.logoutHandler}
-          handleOpeningPointPage={() => this.props.changePage('/point')}
+          handleOpeningPointPage={() => this.props.push('/point')}
           togglePastOrders={this.realtimeCheckHandler}
           pastOrdersToggled={this.state.pastOrdersToggled}
         />
@@ -172,8 +175,9 @@ class Orders extends React.Component {
           openDrawerMenu={() => this.setState({
             isDrawerMenuOpen: true,
           })}
-          handleManagingPoint={() => this.setState({ PointManagerShow: !this.state.PointManagerShow })}
-          handleSavingPoint={() => this.setState({ SavingPointShow: !this.state.SavingPointShow })}
+          getPointList={() => push('pointList')}
+          handleManagingPoint={() => push('managePoint')}
+          handleSavingPoint={() => push('savePoint')}
         />
         <h1>{this.props.getOrders.orders.filter(o => !o.status).length}개 주문 대기</h1>
         {
@@ -198,19 +202,33 @@ class Orders extends React.Component {
               />
             </div>
         }
-        {
-          this.state.SavingPointShow ?
-            <SavingPoint
-              submit={point => this.handleSavingPoint(point)}
-              cancel={() => this.setState({ SavingPointShow: false })}
-            /> : null
-        }
-        {
-          this.state.PointManagerShow ?
-            <PointManager
-              onClose={() => this.setState({ PointManagerShow: false })}
-            /> : null
-        }
+        <Route
+          path="/savePoint"
+          render={
+            props => (
+              <SavingPoint
+                {...props}
+                submit={point => this.handleSavingPoint(point)}
+                cancel={history.goBack}
+              />
+            )
+          }
+        />
+        <Route
+          path="/managePoint"
+          render={
+            props => (
+              <PointManager
+                {...props}
+                onClose={history.goBack}
+              />
+            )
+          }
+        />
+        <Route
+          path="/pointList"
+          component={PointList}
+        />
       </div>
     );
   }
@@ -224,7 +242,7 @@ const mapStateToProps = state => ({
   point: state.main.orders.data.point,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
-  changePage: path => push(path),
+  push,
   noticeDialogOn: noticeDialogActions.on,
   noticeDialogOff: noticeDialogActions.off,
   showError: noticeDialogActions.error,
@@ -239,7 +257,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   showSnackBar: snackBarActions.show,
   dismissSnackBar: snackBarActions.dismiss,
 }, dispatch);
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Orders);
+)(Orders));

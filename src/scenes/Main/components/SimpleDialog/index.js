@@ -27,7 +27,7 @@ class SimpleDialog extends React.Component {
           <Button
             classes={{ root: classes.button }}
             color="primary"
-            raised
+            variant="raised"
             onClick={onConfirm}
           >
             확인
