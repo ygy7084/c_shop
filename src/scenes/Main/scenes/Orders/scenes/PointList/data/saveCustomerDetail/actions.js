@@ -1,9 +1,9 @@
 /* global fetch, document */
 import configure from '../../../../../../../../modules/configure';
 
-export const WAITING = 'Main/orders/pointList/data/getPointList/WAITING';
-export const SUCCESS = 'Main/orders/pointList/data/getPointList/SUCCESS';
-export const FAILURE = 'Main/orders/pointList/data/getPointList/FAILURE';
+export const WAITING = 'Main/orders/pointList/data/saveCustomerDetail/WAITING';
+export const SUCCESS = 'Main/orders/pointList/data/saveCustomerDetail/SUCCESS';
+export const FAILURE = 'Main/orders/pointList/data/saveCustomerDetail/FAILURE';
 
 const waiting = () => {
   return {
@@ -22,10 +22,15 @@ const failure = (error) => {
     error,
   };
 };
-export const request = (list) => {
+export const request = (customer) => {
   return (dispatch) => {
     dispatch(waiting());
-    return fetch(`${configure.SERVER}/api/point`)
+    return fetch(`${configure.SERVER}/api/customer/memo`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(customer),
+      })
       .then((res) => {
         if (res.ok) { return res.json(); }
         return res.json().then((error) => {
@@ -34,7 +39,7 @@ export const request = (list) => {
       })
       .then((res) => {
         if (res.data) {
-          return dispatch(success(res.data));
+          return dispatch(success());
         }
         return dispatch(failure({
           error: null,

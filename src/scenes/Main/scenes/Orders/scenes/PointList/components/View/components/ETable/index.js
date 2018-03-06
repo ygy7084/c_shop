@@ -26,14 +26,14 @@ class EnhancedTable extends React.Component {
     super(props, context);
     this.state = {
       order: 'asc',
-      orderBy: 'calories',
+      orderBy: 'phone',
       data: this.props.list,
       page: 0,
       rowsPerPage: 25,
     };
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.isCummulated !== nextProps.isCummulated || this.props.list.length !== nextProps.list.length) {
+    if (this.props.isCummulated !== nextProps.isCummulated || JSON.stringify(this.props.list) !== JSON.stringify(nextProps.list)) {
       this.setState({
         data: nextProps.list,
       });
@@ -54,8 +54,8 @@ class EnhancedTable extends React.Component {
     this.setState({ data, order, orderBy });
   };
 
-  handleClick = (event, id) => {
-
+  handleClick = (customer) => {
+    this.props.onRowClick(customer);
   };
 
   handleChangePage = (event, page) => {
@@ -72,7 +72,6 @@ class EnhancedTable extends React.Component {
       toggleCummulated,
     } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    console.log(data);
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
     return (
       <Paper className={classes.root}>
@@ -94,7 +93,7 @@ class EnhancedTable extends React.Component {
                 return (
                   <TableRow
                     hover
-                    onClick={event => this.handleClick(event, n.id)}
+                    onClick={() => this.handleClick(n.customer)}
                     tabIndex={-1}
                     key={n.id}
                   >
@@ -103,6 +102,7 @@ class EnhancedTable extends React.Component {
                         <Fragment>
                           <TableCell padding="none">{n.phone}</TableCell>
                           <TableCell numeric>{n.point}</TableCell>
+                          <TableCell numeric>{n.memo}</TableCell>
                         </Fragment> :
                         <Fragment>
                           <TableCell padding="none">{n.customer.phone}</TableCell>

@@ -42,13 +42,20 @@ class Index extends React.Component {
       cummulatedList: [],
     };
   }
-  calculateCummulated = () => {
-    const { list } = this.props;
+  componentWillReceiveProps(nextProps) {
+    if (this.props.list && JSON.stringify(this.props.list) !== JSON.stringify(nextProps.list)) {
+      this.calculateCummulated(nextProps.list);
+    }
+  }
+  calculateCummulated = (l) => {
+    const list = l || this.props.list;
     const cummulatedList = [];
     list.forEach((o) => {
       const i = cummulatedList.findIndex(j => j.phone === o.customer.phone);
       if (i < 0) { cummulatedList.push({
         id: o.id,
+        memo: o.customer.memo,
+        customer: o.customer,
         phone: o.customer.phone,
         point: o.pointChange,
       }); }
@@ -64,6 +71,7 @@ class Index extends React.Component {
     const {
       classes,
       list,
+      onRowClick,
       onClose,
     } = this.props;
     return (
@@ -90,6 +98,7 @@ class Index extends React.Component {
                   isCummulated: !this.state.isCummulated,
                 });
               }}
+              onRowClick={onRowClick}
               list={this.state.isCummulated ? this.state.cummulatedList : list}
             /> : null
         }

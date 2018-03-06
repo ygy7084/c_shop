@@ -1,9 +1,16 @@
 import React from 'react';
+import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import './styles.css';
 
+const styles = {
+  button: {
+    marginTop: '20px',
+    marginBottom: '30px',
+  },
+};
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +27,7 @@ class Login extends React.Component {
       });
   }
   render() {
+    const { classes } = this.props;
     return (
       <div className="paperWrapper">
         <Paper
@@ -40,7 +48,7 @@ class Login extends React.Component {
           />
           <br />
           <Button
-            className="button"
+            className={classes.button}
             variant="raised"
             color="primary"
             onClick={() => this.props.onLogin({
@@ -55,4 +63,4 @@ class Login extends React.Component {
     );
   }
 }
-export default Login;
+export default withStyles(styles)(Login);

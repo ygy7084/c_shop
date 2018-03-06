@@ -1,9 +1,9 @@
 /* global fetch, document */
 import configure from '../../../../../../../../modules/configure';
 
-export const WAITING = 'Main/orders/pointList/data/getPointList/WAITING';
-export const SUCCESS = 'Main/orders/pointList/data/getPointList/SUCCESS';
-export const FAILURE = 'Main/orders/pointList/data/getPointList/FAILURE';
+export const WAITING = 'Main/orders/pointList/data/getCustomerDetail/WAITING';
+export const SUCCESS = 'Main/orders/pointList/data/getCustomerDetail/SUCCESS';
+export const FAILURE = 'Main/orders/pointList/data/getCustomerDetail/FAILURE';
 
 const waiting = () => {
   return {
@@ -22,10 +22,10 @@ const failure = (error) => {
     error,
   };
 };
-export const request = (list) => {
+export const request = (id) => {
   return (dispatch) => {
     dispatch(waiting());
-    return fetch(`${configure.SERVER}/api/point`)
+    return fetch(`${configure.SERVER}/api/point/customerDetail/${id}`)
       .then((res) => {
         if (res.ok) { return res.json(); }
         return res.json().then((error) => {

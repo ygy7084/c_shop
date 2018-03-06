@@ -16,6 +16,7 @@ const columnData = [
 const columnData_cummulated = [
   { id: 'phone', numeric: false, disablePadding: false, label: '번호' },
   { id: 'point', numeric: true, disablePadding: false, label: '포인트' },
+  { id: 'memo', numeric: false, disablePadding: false, label: '메모' },
 ];
 
 class EnhancedTableHead extends React.Component {
