@@ -7,18 +7,11 @@ import Dialog, {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from 'material-ui/Dialog';;
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
-import Switch from 'material-ui/Switch';
+} from 'material-ui/Dialog';
 
 const styles = theme => ({
   textField: {
     fontSize: '5em',
-  },
-  button: {
-    width: '15vw',
-    height: '7vh',
-    fontSize: '1.3em',
   },
 });
 class CustomerDetail extends React.Component {
@@ -30,7 +23,6 @@ class CustomerDetail extends React.Component {
   }
   render() {
     const { classes, customer } = this.props;
-    console.log(customer, customer._id);
     return (
       <Dialog
         open
