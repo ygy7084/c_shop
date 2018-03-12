@@ -221,6 +221,7 @@ class Orders extends React.Component {
               <PointManager
                 {...props}
                 onClose={history.goBack}
+                socket={socket}
               />
             )
           }

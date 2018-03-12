@@ -27,7 +27,6 @@ const theme = createMuiTheme({
     error: red,
   },
 });
-
 class App extends React.Component {
   constructor(props) {
     super(props);

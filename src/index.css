@@ -1,14 +1,6 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100% !important;
-    font-family: 'Roboto', sans-serif;
-}
-[data-reactroot]
-{
-    height: 100% !important;
-}
-#root {
+html, body, #root {
     height: 100%;
+    margin: 0;
 }
-/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFVBQVU7SUFDVixXQUFXO0lBQ1gsd0JBQXdCO0lBQ3hCLGtDQUFrQztDQUNyQztBQUNEOztJQUVJLHdCQUF3QjtDQUMzQjtBQUNEO0lBQ0ksYUFBYTtDQUNoQiIsImZpbGUiOiJpbmRleC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJodG1sLCBib2R5IHtcbiAgICBtYXJnaW46IDA7XG4gICAgcGFkZGluZzogMDtcbiAgICBoZWlnaHQ6IDEwMCUgIWltcG9ydGFudDtcbiAgICBmb250LWZhbWlseTogJ1JvYm90bycsIHNhbnMtc2VyaWY7XG59XG5bZGF0YS1yZWFjdHJvb3RdXG57XG4gICAgaGVpZ2h0OiAxMDAlICFpbXBvcnRhbnQ7XG59XG4jcm9vdCB7XG4gICAgaGVpZ2h0OiAxMDAlO1xufSJdfQ== */
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJpbmRleC5jc3MifQ== */

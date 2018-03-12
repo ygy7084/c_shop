@@ -10,6 +10,7 @@ const dials = [
 ];
 class Dial extends React.Component {
   render() {
+    const { submitLabel } = this.props;
     return (
       <div className="dial">
         {
@@ -34,7 +35,7 @@ class Dial extends React.Component {
                   }}
                   /> :
                   num === 'submit' ?
-                    '적립' : num
+                    submitLabel : num
               }
             </div>
           ))

@@ -8,9 +8,10 @@ import io from 'socket.io-client';
 import Background from './components/Background';
 import Transitions from './components/Transitions';
 import BasicPages from './components/BasicPages';
-import SavingPoint from './components/SavingPoint';
+import RequestPhoneNumber from './components/RequestPhoneNumber';
 import SimpleDialog from '../../components/SimpleDialog';
 import * as savePointActions from './data/savePoint/actions';
+import * as submitPhoneNumberActions from './data/submitPhoneNumber/actions';
 import * as ballLoaderActions from '../../../../data/ballLoader/actions';
 
 let socket;
@@ -22,7 +23,7 @@ class Point extends React.Component {
       dialogForSound: true,
       view: 'BasicPages',
       pointForSave: 0,
-      SavingPointStatus: 'standby',
+      requestPhoneInputStatus: 'standby',
       elapsedTime: null,
       /*
         standby: 대기
@@ -37,7 +38,7 @@ class Point extends React.Component {
     socket = io();
     socket.on('point', (data) => {
       const { view, pointForSave } = data;
-      if (view === 'SavingPoint') {
+      if (view === 'SavingPoint' || view === 'UsingPoint') {
         // 타이머 초기화
         this.playAudio();
         if (!timer) {
@@ -45,14 +46,14 @@ class Point extends React.Component {
             if (new Date().getTime() - this.state.elapsedTime > 10000) {
               clearInterval(timer);
               timer = null;
-              this.setState({ view: 'BasicPages', SavingPointStatus: 'standby' });
+              this.setState({ view: 'BasicPages', requestPhoneInputStatus: 'standby' });
             }
           }, 1000);
         }
         this.setState({
           view,
           pointForSave,
-          SavingPointStatus: 'phoneInput',
+          requestPhoneInputStatus: 'phoneInput',
           elapsedTime: new Date().getTime(),
         });
       }
@@ -78,7 +79,7 @@ class Point extends React.Component {
       clearInterval(timer);
       timer = null;
     }
-    this.setState({ SavingPointStatus: 'submit' });
+    this.setState({ requestPhoneInputStatus: 'submit' });
     this.props.loader(true);
     this.props.savePointRequest({
       shopId: this.props.user.shop._id,
@@ -88,9 +89,9 @@ class Point extends React.Component {
       .then((data) => {
         this.props.loader(false);
         if (this.props.savePoint.status === 'SUCCESS') {
-          this.setState({ SavingPointStatus: 'success' });
+          this.setState({ requestPhoneInputStatus: 'success' });
           setTimeout(() => {
-            this.setState({ view: 'BasicPages', SavingPointStatus: 'standby' });
+            this.setState({ view: 'BasicPages', requestPhoneInputStatus: 'standby' });
           }, 3000);
         } else {
           throw data;
@@ -98,15 +99,35 @@ class Point extends React.Component {
       })
       .catch((error) => {
         console.error(error);
-        this.setState({ SavingPointStatus: 'failure' });
+        this.setState({ requestPhoneInputStatus: 'failure' });
         setTimeout(() => {
-          this.setState({ view: 'BasicPages', SavingPointStatus: 'standby' });
+          this.setState({ view: 'BasicPages', requestPhoneInputStatus: 'standby' });
         }, 3000);
       });
   }
+  submitPhoneNumber = (phone) => {
+    clearInterval(timer);
+    timer = null;
+    this.props.submitPhoneNumberRequest(phone)
+      .then(() => {
+        if (this.props.submitPhoneNumber.status === 'SUCCESS') {
+          this.setState({ view: 'BasicPages', requestPhoneInputStatus: 'standby' });
+        } else {
+          throw data;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({ requestPhoneInputStatus: 'failure' });
+        setTimeout(() => {
+          this.setState({ view: 'BasicPages', requestPhoneInputStatus: 'standby' });
+        }, 3000);
+      });
+  };
   render() {
+    const toggle = ['SavingPoint', 'UsingPoint'].includes(this.state.view);
     return (
-      <Background toggle={this.state.view === 'SavingPoint'}>
+      <Background toggle={toggle}>
         <SimpleDialog
           isOpen={this.state.dialogForSound}
           onConfirm={() => {
@@ -119,11 +140,10 @@ class Point extends React.Component {
         </audio>
         <Transitions view={this.state.view}>
           <BasicPages transitionKey="BasicPages" />
-          <SavingPoint
+          <RequestPhoneNumber
             transitionKey="SavingPoint"
-            status={this.state.SavingPointStatus}
+            status={this.state.requestPhoneInputStatus}
             pointForSave={this.state.pointForSave}
-            loader={this.props.loader}
             submit={this.handleSavingPoint}
             successResult={{
               customer: this.props.savePoint.customer,
@@ -132,6 +152,16 @@ class Point extends React.Component {
             updateElapsedTime={() => this.setState({
               elapsedTime: new Date().getTime(),
             })}
+            label="적립"
+          />
+          <RequestPhoneNumber
+            transitionKey="UsingPoint"
+            status="phoneInput"
+            submit={this.submitPhoneNumber}
+            updateElapsedTime={() => this.setState({
+              elapsedTime: new Date().getTime(),
+            })}
+            label="사용"
           />
         </Transitions>
       </Background>
@@ -140,11 +170,13 @@ class Point extends React.Component {
 }
 const mapStateToProps = state => ({
   savePoint: state.main.point.data.savePoint,
+  submitPhoneNumber: state.main.point.data.submitPhoneNumber,
   user: state.data.auth.user,
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
   changePage: path => push(path),
   savePointRequest: savePointActions.request,
+  submitPhoneNumberRequest: submitPhoneNumberActions.request,
   loader: ballLoaderActions.manager,
 }, dispatch);
 export default connect(

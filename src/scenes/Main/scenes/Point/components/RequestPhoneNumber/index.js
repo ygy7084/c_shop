@@ -49,7 +49,11 @@ class SavingPoint extends React.Component {
     }
   }
   render() {
-    const { pointForSave, successResult } = this.props;
+    const {
+      pointForSave,
+      successResult,
+      label,
+    } = this.props;
     return (
       <div className="savingPoint">
         <Motion
@@ -70,12 +74,15 @@ class SavingPoint extends React.Component {
                       input={this.state.input}
                     />
                   </FlexCenter>
-                  <FlexCenter transitionKey="success">
-                    <Saved
-                      customer={successResult.customer}
-                      point={successResult.point}
-                    />
-                  </FlexCenter>
+                  {
+                    label === '적립' ?
+                      <FlexCenter transitionKey="success">
+                        <Saved
+                          customer={successResult.customer}
+                          point={successResult.point}
+                        />
+                      </FlexCenter> : null
+                  }
                   <FlexCenter transitionKey="failure">
                     <div>
                       <Typohgraphy
@@ -86,7 +93,7 @@ class SavingPoint extends React.Component {
                         }}
                         align="center"
                       >
-                        적립 실패
+                        {label} 실패
                       </Typohgraphy>
                       <Typohgraphy
                         style={{
@@ -95,7 +102,7 @@ class SavingPoint extends React.Component {
                         }}
                         align="center"
                       >
-                        적립을 다시 요청하십시요.
+                        다시 요청하십시요.
                       </Typohgraphy>
                     </div>
                   </FlexCenter>
@@ -112,7 +119,10 @@ class SavingPoint extends React.Component {
             전화번호를 입력 해 주십시요.
           </Typohgraphy>
         </div>
-        <Dial handleSelect={this.handlePhoneInputSelect} />
+        <Dial
+          submitLabel={label}
+          handleSelect={this.handlePhoneInputSelect}
+        />
       </div>
     );
   }

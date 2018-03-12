@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:4001",
   "dependencies": {
+    "autoprefixer": "^8.1.0",
     "autosuggest-highlight": "^3.1.1",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
@@ -73,7 +74,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
-    "build-css": "node-sass-chokidar src/ -o src/ && postcss src/**/*.css --use autoprefixer -d src/",
+    "build-css": "node-sass-chokidar src/ -o src/ && postcss src/**/*.css -d src/ --use autoprefixer",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "node scripts/start.js",
     "start": "npm-run-all -p watch-css start-js",

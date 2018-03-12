@@ -3,8 +3,6 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-import Input, { InputLabel } from 'material-ui/Input';
-import { FormControl, FormHelperText } from 'material-ui/Form';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -12,24 +10,9 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 
-// {
-//   status === 'INIT' ?
-//     <div style={{ float: 'left' }}>
-//       <Button
-//         classes={{ root: classes.button }}
-//         color="accent"
-//         raised
-//       >
-//         전체 데이터 보기
-//       </Button>
-//     </div> : null
-// }
-const styles = theme => ({
+const styles = {
   textField: {
     fontSize: '5vh',
-  },
-  button: {
-    fontSize: '2.6vmin',
   },
   actions: {
     width: '100%',
@@ -38,35 +21,8 @@ const styles = theme => ({
     paddingLeft: '24px',
     paddingBottom: '24px',
   },
-});
+};
 class ManagingPoint extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      phoneInput: '',
-      pointInput: '',
-      inputFocused: false,
-    };
-    this.handlePointInput = this.handlePointInput.bind(this);
-  }
-  componentDidUpdate() {
-    const input = document.getElementById('ManagingPointInput');
-    if (input) input.focus();
-    if (input && !this.state.inputFocused) {
-      this.setState({
-        phoneInput: '010',
-        inputFocused: true,
-      });
-    }
-  }
-  handlePointInput(e) {
-    const point = e.target.value.replace(/\D/g, '');
-    if (point === '') {
-      this.setState({ pointInput: '' });
-    } else if (Number(point) <= this.props.customerPoint.point) {
-      this.setState({ pointInput: Number(point) });
-    }
-  }
   render() {
     const {
       classes,
@@ -75,6 +31,12 @@ class ManagingPoint extends React.Component {
       customerPoint,
       useCustomerPoint,
       onClose,
+      requestPhoneNumber,
+      didRequestPhoneNumber,
+      phoneInput,
+      pointInput,
+      handlePhoneInput,
+      handlePointInput,
     } = this.props;
     return (
       <Dialog
@@ -87,15 +49,22 @@ class ManagingPoint extends React.Component {
           <DialogContentText>
             고객님 번호를 입력하십시요.
           </DialogContentText>
+          <Button
+            fullWidth
+            color="primary"
+            onClick={requestPhoneNumber}
+            disabled={didRequestPhoneNumber || status === 'GOT_CUSTOMER_POINT'}
+          >
+            입력 요청
+          </Button>
           <TextField
             type="number"
             className={classes.textField}
-            value={this.state.phoneInput}
-            onChange={e => this.setState({ phoneInput: e.target.value.replace(/\D/g, '') })}
-            id="ManagingPointInput"
+            value={phoneInput}
+            onChange={handlePhoneInput}
+            id="ManagingPhoneInput"
             disabled={status === 'GOT_CUSTOMER_POINT'}
             autoFocus
-
             margin="dense"
             fullWidth
           />
@@ -119,8 +88,8 @@ class ManagingPoint extends React.Component {
                 <TextField
                   type="number"
                   classes={{ root: classes.textField }}
-                  value={this.state.pointInput}
-                  onChange={this.handlePointInput}
+                  value={pointInput}
+                  onChange={handlePointInput}
                   autoFocus
                   margin="dense"
                   fullWidth
@@ -131,7 +100,7 @@ class ManagingPoint extends React.Component {
                 <TextField
                   type="number"
                   classes={{ root: classes.textField }}
-                  value={this.state.pointInput === '' ? '' : customerPoint.point - this.state.pointInput}
+                  value={pointInput === '' ? '' : customerPoint.point - pointInput}
                   margin="dense"
                   fullWidth
                   disabled
@@ -147,8 +116,8 @@ class ManagingPoint extends React.Component {
                   classes={{ root: classes.button }}
                   color="primary"
                   variant="raised"
-                  onClick={() => useCustomerPoint(this.state.pointInput)}
-                  disabled={this.state.pointInput === ''}
+                  onClick={() => useCustomerPoint(pointInput)}
+                  disabled={pointInput === ''}
                 >
                   사용
                 </Button> :
@@ -156,7 +125,7 @@ class ManagingPoint extends React.Component {
                   classes={{ root: classes.button }}
                   color="primary"
                   variant="raised"
-                  onClick={() => getCustomerPoint(this.state.phoneInput)}
+                  onClick={() => getCustomerPoint(phoneInput)}
                 >
                   입력
                 </Button>
