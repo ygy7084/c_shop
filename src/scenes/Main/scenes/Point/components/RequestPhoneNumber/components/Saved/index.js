@@ -22,24 +22,6 @@ class Saved extends React.Component {
         >
           감사합니다.
         </Typography>
-        <Typography
-          style={{
-            color: 'white',
-            fontSize: '5vh'
-          }}
-          align="center"
-        >
-          적립 후 포인트
-        </Typography>
-        <Typography
-          style={{
-            color: 'white',
-            fontSize: '5vh'
-          }}
-          align="center"
-        >
-          { `${point} 점` }
-        </Typography>
       </div>
     );
   }
